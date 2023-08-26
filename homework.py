@@ -1,13 +1,15 @@
 import logging
 import os
+import sys
 import time
 from http import HTTPStatus
-import sys
+
 import requests
 import telegram
 from dotenv import load_dotenv
 
-from exceptions import HTTPRequestError, ResponseApiError, KeyApiError, StatusHomeworkError
+from exceptions import (HTTPRequestError, KeyApiError, ResponseApiError,
+                        StatusHomeworkError)
 
 load_dotenv()
 

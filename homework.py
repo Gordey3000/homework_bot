@@ -13,12 +13,6 @@ from exceptions import (HTTPRequestError, KeyApiError, ResponseApiError,
 
 load_dotenv()
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename='program.log',
-    format='%(asctime)s, %(levelname)s, %(message)s, %(name)s'
-)
-
 PRACTICUM_TOKEN = os.getenv('YA_TOKEN')
 TELEGRAM_TOKEN = os.getenv('TOKEN')
 TELEGRAM_CHAT_ID = os.getenv('CHAT_ID')
@@ -42,7 +36,7 @@ def check_tokens():
 
 def send_message(bot, message):
     """Функция отправки сообщения в чат."""
-    logging.error('Попытка отправки сообщения')
+    logging.debug('Попытка отправки сообщения')
     try:
         bot.send_message(TELEGRAM_CHAT_ID, message)
     except telegram.error.TelegramError:
@@ -73,7 +67,7 @@ def check_response(response):
         raise KeyError('Отсутствует ключ homeworks в ответе API')
     if 'current_date' not in response:
         raise KeyError('Отсутсвует ключ current_date в ответе API')
-    if type(response['homeworks']) != list:
+    if not isinstance(response['homeworks'], list):
         raise TypeError('Ответы API приходт не в виде списка')
     return response['homeworks'][0]
 
@@ -108,8 +102,13 @@ def main():
                 send_message(bot, message)
         except Exception as error:
             logging.error(f'Сбой в работе программы: {error}')
+            send_message(bot, error)
         time.sleep(RETRY_PERIOD)
 
 
 if __name__ == '__main__':
     main()
+    logging.basicConfig(
+        level=logging.DEBUG,
+        filename='program.log',
+        format='%(asctime)s, %(levelname)s, %(message)s, %(name)s')

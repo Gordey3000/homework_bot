@@ -107,8 +107,8 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
     logging.basicConfig(
         level=logging.DEBUG,
         filename='program.log',
         format='%(asctime)s, %(levelname)s, %(message)s, %(name)s')
+    main()
